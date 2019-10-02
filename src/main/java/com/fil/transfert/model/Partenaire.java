@@ -1,5 +1,6 @@
 package com.fil.transfert.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
@@ -33,16 +34,25 @@ public class Partenaire {
     @NotBlank
     @Size(min=3, max = 50)
     private String ninea;
+    @OneToMany(mappedBy="partenaire")
+    @JsonIgnoreProperties("partenaire")
+    private Set<User> users;
 
-    @NotBlank
-    @Size(min=3, max = 50)
-    private String telephone;
-
-
-    @NotBlank
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "id", fetch = FetchType.LAZY)
+    @ManyToOne
+    @JoinColumn(name="createdBy", nullable=true)
+    @JsonIgnoreProperties("user")
     private User createdBy;
 
+    public Set<Compte> getComptes() {
+        return comptes;
+    }
+
+    public void setComptes(Set<Compte> comptes) {
+        this.comptes = comptes;
+    }
+
+    @OneToMany(mappedBy="partenaire")
+    private Set<Compte> comptes;
     @NotBlank
     @Size(min=3, max = 50)
     private String etat;
@@ -50,7 +60,6 @@ public class Partenaire {
     @NaturalId
     @NotBlank
     @Size(max = 50)
-    @Email
     private String description;
 
     @NotBlank
@@ -62,5 +71,92 @@ public class Partenaire {
 
     public Partenaire() {}
 
+    public Partenaire(@NotBlank @Size(min = 3, max = 50) String raisonSocial, @NotBlank @Size(min = 3, max = 50) String adresse,@NotBlank @Size(min = 3, max = 50) String ninea, @NotBlank @Size(max = 50) @Email String description, @NotBlank @Size(min = 6, max = 100) String mail, @NotBlank @Size(min = 6, max = 100) String fix) {
+        this.raisonSocial = raisonSocial;
+        this.adresse = adresse;
+        this.ninea = ninea;
+        this.description = description;
+        this.mail = mail;
+        this.fix = fix;
+    }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getRaisonSocial() {
+        return raisonSocial;
+    }
+
+    public void setRaisonSocial(String raisonSocial) {
+        this.raisonSocial = raisonSocial;
+    }
+
+    public String getAdresse() {
+        return adresse;
+    }
+
+    public void setAdresse(String adresse) {
+        this.adresse = adresse;
+    }
+
+    public String getNinea() {
+        return ninea;
+    }
+
+    public void setNinea(String ninea) {
+        this.ninea = ninea;
+    }
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
+    }
+
+    public User getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public String getEtat() {
+        return etat;
+    }
+
+    public void setEtat(String etat) {
+        this.etat = etat;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+
+    public String getFix() {
+        return fix;
+    }
+
+    public void setFix(String fix) {
+        this.fix = fix;
+    }
 }

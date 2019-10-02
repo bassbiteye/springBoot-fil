@@ -1,6 +1,7 @@
 package com.fil.transfert.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
@@ -88,15 +89,19 @@ public class User{
     @NotBlank
     @Size(min=6, max = 100)
     private String password;
+    @ManyToOne
+    @JoinColumn(name="partenaire_id", nullable=true)
+    private Partenaire partenaire;
+
+    @OneToMany(mappedBy="createdBy")
+    private Set<Partenaire> partenaires;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
-    @OneToMany(mappedBy="createdBy", fetch=FetchType.LAZY)
-    @JsonBackReference
-    private List<Partenaire> partenaires;
+
     public User() {}
 
     public User(@NotBlank @Size(min = 3, max = 50) String nom, @NotBlank @Size(min = 3, max = 50) String prenom, @NotBlank @Size(min = 3, max = 50) String etat, @NotBlank @Size(min = 3, max = 50) String telephone, @NotBlank @Size(min = 3, max = 50) String imageName, @NotBlank @Size(min = 3, max = 50) String username, @NotBlank @Size(max = 50) @Email String email, @NotBlank @Size(min = 6, max = 100) String password) {
@@ -152,6 +157,22 @@ public class User{
 
     public Set<Role> getRoles() {
         return roles;
+    }
+
+    public Partenaire getPartenaire() {
+        return partenaire;
+    }
+
+    public void setPartenaire(Partenaire partenaire) {
+        this.partenaire = partenaire;
+    }
+
+    public Set<Partenaire> getPartenaires() {
+        return partenaires;
+    }
+
+    public void setPartenaires(Set<Partenaire> partenaires) {
+        this.partenaires = partenaires;
     }
 
     public void setRoles(Set<Role> roles) {

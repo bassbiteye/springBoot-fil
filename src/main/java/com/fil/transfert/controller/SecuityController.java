@@ -1,22 +1,17 @@
 package com.fil.transfert.controller;
 
 
+import com.fil.transfert.model.PartForm;
 import com.fil.transfert.model.Role;
 import com.fil.transfert.model.User;
-import com.fil.transfert.model.UserForm;
-import com.fil.transfert.repository.UserRepository;
-import com.fil.transfert.services.RoleService;
 import com.fil.transfert.services.UserDetailsServiceImpl;
 import com.fil.transfert.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -35,7 +30,7 @@ public class SecuityController {
 
     @PostMapping(value = "/register", consumes = {MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasAnyAuthority('ROLE_SUPER','ROLE_ADMIN')")
-    public User register(@RequestBody UserForm userForm) throws Exception {
+    public User register(@RequestBody PartForm userForm) throws Exception {
 
         User user=new  User(userForm.getNom(),userForm.getPrenom(), userForm.getEtat(), userForm.getTelephone(), userForm.getImageName(),userForm.getUsername(),userForm.getEmail(),userForm.getPassword());
 
