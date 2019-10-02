@@ -1,9 +1,11 @@
 package com.fil.transfert.controller;
 
 
+import com.fil.transfert.model.Message;
 import com.fil.transfert.model.PartForm;
 import com.fil.transfert.model.Role;
 import com.fil.transfert.model.User;
+import com.fil.transfert.repository.UserRepository;
 import com.fil.transfert.services.UserDetailsServiceImpl;
 import com.fil.transfert.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +14,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -26,7 +30,8 @@ public class SecuityController {
     PasswordEncoder encoder;
     @Autowired
     UserDetailsServiceImpl userDetailsService;
-
+    @Autowired
+    UserRepository userRepository;
 
     @PostMapping(value = "/register", consumes = {MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasAnyAuthority('ROLE_SUPER','ROLE_ADMIN')")
@@ -57,5 +62,43 @@ public class SecuityController {
         User user = userDetailsService.getUserconnected();
         return user;
     }
+    @PreAuthorize("hasAuthority('ROLE_SUPER') or hasAuthority('ROLE_ADMIN')")
+    @PutMapping(value = "/etat/{id}",consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public Message bloquer(@PathVariable("id") long id) throws Exception{
+        System.out.println(id);
+
+            User user = userService.findById(id).orElseThrow(
+                    () -> new Exception("utilisateur introuvable")
+            );
+
+            if (user != null) {
+                if(user.getId()==(1)){
+                    Message message = new Message(200,"Impossible de bloquer cet utilisateur");
+                    return message;
+                }
+                if(user.getEtat().equals("bloquer")){
+                    user.setEtat("actif");
+                    userService.save(user);
+                    Message message = new Message(200,"l' utilisateur est actif");
+                    return message;
+                }
+                 else if(user.getEtat().equals("actif")){
+                    user.setEtat("bloquer");
+                    userService.save(user);
+                    Message message = new Message(200,"l' utilisateur est bloqué");
+                    return message;
+
+                }
+
+
+
+            }
+
+
+        Message message = new Message(200,"erreur");
+        return message;
+}
+
+
 
 }

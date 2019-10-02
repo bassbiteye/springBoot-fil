@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CompteService {
@@ -21,5 +22,9 @@ public class CompteService {
         return compteRepository.findAll();
     }
 
+     /*   public Optional<Compte> findOne(){
+            return compteRepository.findOne(int );
+
+        }*/
 
 }

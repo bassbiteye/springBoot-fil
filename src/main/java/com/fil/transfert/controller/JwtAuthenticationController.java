@@ -3,6 +3,8 @@ package com.fil.transfert.controller;
 import com.fil.transfert.config.JwtTokenUtil;
 import com.fil.transfert.model.JwtRequest;
 import com.fil.transfert.model.JwtResponse;
+import com.fil.transfert.model.User;
+import com.fil.transfert.repository.UserRepository;
 import com.fil.transfert.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -22,6 +24,8 @@ public class JwtAuthenticationController {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
     @Autowired
+    private UserRepository userRepository;
+    @Autowired
     private UserDetailsServiceImpl userDetailsService;
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE })
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
@@ -35,6 +39,15 @@ public class JwtAuthenticationController {
     @RequestMapping(value = "/login", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE })
     public @ResponseBody
     String createLoginToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
+        User user  = userRepository.findByUsername(authenticationRequest.getUsername()).orElseThrow();
+        if(user.getEtat().equals("bloquer")){
+            return  "vous etes bloqués";
+        }
+
+        if(user.getPartenaire().getEtat().equals("ROLE_SUPER")){
+            return  "votre partenaire est bloqué";
+        }
+
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
         final UserDetails userDetails = userDetailsService
                 .loadUserByUsername(authenticationRequest.getUsername());

@@ -1,6 +1,7 @@
 package com.fil.transfert.model;
 
 public class PartForm {
+    //partenaire
     private String adresse;
     private String description;
     private String raisonSocial;
@@ -10,7 +11,7 @@ public class PartForm {
     private String etat;
     private String mail;
 //user
-private String nom;
+    private String nom;
     private String prenom;
     private String telephone;
     private String imageName;

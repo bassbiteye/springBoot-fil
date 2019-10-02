@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashSet;
 import java.util.Set;
 
+import static java.lang.Math.random;
+
 
 @RestController
 @CrossOrigin
@@ -36,9 +38,9 @@ public class PartenaireController {
     PasswordEncoder encoder;
     @Autowired
     private UserService userService;
-    @PostMapping(value = "/addPar", consumes = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(value = "/addP", consumes = {MediaType.APPLICATION_JSON_VALUE})
     @PreAuthorize("hasAnyAuthority('ROLE_SUPER')")
-        public void addPP(@RequestBody PartForm partForm) throws Exception {
+        public Message addPP(@RequestBody PartForm partForm) throws Exception {
             //ajout partenaire
         Partenaire partenaire= new  Partenaire(partForm.getRaisonSocial(),partForm.getAdresse(),partForm.getNinea(),partForm.getDescription(),partForm.getMail(),partForm.getFix());
            User uConnect = userDetailsService.getUserconnected();
@@ -49,6 +51,7 @@ public class PartenaireController {
             //ajout admin partenaire
             User user=new  User(partForm.getNom(),partForm.getPrenom(), partForm.getEtat(), partForm.getTelephone(), partForm.getImageName(),partForm.getUsername(),partForm.getEmail(),partForm.getPassword());
             user.setPassword (encoder.encode(user.getPassword()));
+            user.setEtat("acitf");
             Set<Role> roles = new HashSet<>();
             Role role=new Role();
             role.setId((long) 1);
@@ -58,13 +61,22 @@ public class PartenaireController {
              userService.save(user);
             //ajout compte
             Compte compte = new Compte();
-            compte.setSolde("355500");
-            compte.setNumCompte("10000");
+            double x = (int)(Math.random()*((999999)+10));
+            compte.setSolde("0");
+            compte.setNumCompte(String.valueOf(x));
             compte.setPartenaire(partenaire);
             compteService.save(compte);
-
-
+            Message message = new Message(200,"partenaire ajouté avec success");
+            return message;
     }
+/*
+    @PostMapping(value = "/addC", consumes = {MediaType.APPLICATION_JSON_VALUE})
+    @PreAuthorize("hasAnyAuthority('ROLE_SUPER')")
+    public Message addc(@RequestBody PartForm partForm) throws Exception {
 
-
+                Compte compte = new Compte();
+                compteService.
+        Message message = new Message(200,"partenaire ajouté avec success");
+        return message;
+    }*/
 }
