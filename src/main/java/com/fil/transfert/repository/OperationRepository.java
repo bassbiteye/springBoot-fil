@@ -1,7 +1,7 @@
 package com.fil.transfert.repository;
 
 import com.fil.transfert.model.Compte;
-import com.fil.transfert.model.Partenaire;
+import com.fil.transfert.model.Operation;
 import com.fil.transfert.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,9 +13,9 @@ import java.util.Optional;
 
 
 @Repository
-public interface CompteRepository extends JpaRepository<Compte, Long> {
-Optional<Compte> findCompteByNumCompte(String numCompte);
-    @Query("SELECT c FROM Compte c WHERE c.partenaire = :partenaire")
-    List<Compte> findallCompte(@Param("partenaire") Partenaire partenaire);
+public interface OperationRepository extends JpaRepository<Operation, Long> {
+    @Query("SELECT o FROM Operation o WHERE o.caissier = :user AND o.compte = :compte")
+    Optional<Compte> findMesDepots(@Param("user") User caissier, @Param("compte") Compte compte);
 
+  List<Operation> findOperationsByCaissier(User user);
 }

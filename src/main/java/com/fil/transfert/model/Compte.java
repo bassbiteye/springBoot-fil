@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import java.util.Set;
 
 
 @Entity
@@ -17,13 +17,18 @@ public class Compte {
     private Long id;
     @NotBlank
     private String numCompte;
-    @NotBlank
-    private String solde;
+    private Long solde;
+    //@JsonIgnore
     @ManyToOne
     @JoinColumn(name="partenaire", nullable=false)
     @JsonIgnoreProperties("partenaire")
     private Partenaire partenaire;
-
+    @OneToMany(mappedBy="compte")
+    @JsonIgnoreProperties("compte")
+    private Set<User> users;
+    @OneToMany(mappedBy="compte")
+    @JsonIgnoreProperties("compte")
+    private Set<Operation> operations;
     public Compte() {
     }
 
@@ -43,11 +48,11 @@ public class Compte {
         this.numCompte = numCompte;
     }
 
-    public String getSolde() {
+    public Long getSolde() {
         return solde;
     }
 
-    public void setSolde(String solde) {
+    public void setSolde(Long solde) {
         this.solde = solde;
     }
 
@@ -57,5 +62,21 @@ public class Compte {
 
     public void setPartenaire(Partenaire partenaire) {
         this.partenaire = partenaire;
+    }
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
+    }
+
+    public Set<Operation> getOperations() {
+        return operations;
+    }
+
+    public void setOperations(Set<Operation> operations) {
+        this.operations = operations;
     }
 }

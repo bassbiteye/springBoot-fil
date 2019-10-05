@@ -1,5 +1,6 @@
 package com.fil.transfert.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.NaturalId;
 
@@ -34,6 +35,7 @@ public class Partenaire {
     @NotBlank
     @Size(min=3, max = 50)
     private String ninea;
+    @JsonIgnore
     @OneToMany(mappedBy="partenaire")
     @JsonIgnoreProperties("partenaire")
     private Set<User> users;

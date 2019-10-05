@@ -19,6 +19,26 @@ public class PartForm {
     private String email;
     private String password;
     private Long rol;
+//compte
+    private String numCompte;
+    private Long solde;
+
+
+    public String getNumCompte() {
+        return numCompte;
+    }
+
+    public void setNumCompte(String numCompte) {
+        this.numCompte = numCompte;
+    }
+
+    public Long getSolde() {
+        return solde;
+    }
+
+    public void setSolde(Long solde) {
+        this.solde = solde;
+    }
 
     public String getNom() {
         return nom;

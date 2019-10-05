@@ -39,15 +39,15 @@ public class JwtAuthenticationController {
     @RequestMapping(value = "/login", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE })
     public @ResponseBody
     String createLoginToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
-        User user  = userRepository.findByUsername(authenticationRequest.getUsername()).orElseThrow();
+        User user  = userRepository.findByUsername(authenticationRequest.getUsername()).orElseThrow(
+                () -> new Exception("user introuvable")
+        );
         if(user.getEtat().equals("bloquer")){
-            return  "vous etes bloqués";
+            return  "vous etes bloqué";
         }
-
-        if(user.getPartenaire().getEtat().equals("ROLE_SUPER")){
-            return  "votre partenaire est bloqué";
-        }
-
+       /* if(user.getPartenaire().getEtat().equals("bloquer") && user.getPartenaire()!=null){
+            return  "votre partenaire bloqué";
+        }*/
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
         final UserDetails userDetails = userDetailsService
                 .loadUserByUsername(authenticationRequest.getUsername());

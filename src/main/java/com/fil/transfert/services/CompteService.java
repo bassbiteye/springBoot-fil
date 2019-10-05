@@ -1,6 +1,8 @@
 package com.fil.transfert.services;
 
 import com.fil.transfert.model.Compte;
+import com.fil.transfert.model.Partenaire;
+import com.fil.transfert.model.User;
 import com.fil.transfert.repository.CompteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,10 +23,13 @@ public class CompteService {
     public List<Compte> findAll(){
         return compteRepository.findAll();
     }
+public Optional<Compte> findCompteByNumCompte(String numCompte){
+        return compteRepository.findCompteByNumCompte(numCompte);
+}
+public List<Compte> findallCompte(Partenaire p){
+        return compteRepository.findallCompte(p);
+}
 
-     /*   public Optional<Compte> findOne(){
-            return compteRepository.findOne(int );
 
-        }*/
 
 }

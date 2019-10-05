@@ -22,12 +22,9 @@ public class UserService  {
         return userRepository.findAll();
     }
 
-
-    public User getUserbyId(long user) {
-        User obj = userRepository.findById(user).get();
-        return obj;
-    }
     public Optional<User> findById(long id){
         return userRepository.findById(id);
     }
+    public List<User> findUsersByPartenaireIsNullAndCompteIsNull(){
+        return userRepository.findUsersByPartenaireIsNullAndCompteIsNull();}
 }

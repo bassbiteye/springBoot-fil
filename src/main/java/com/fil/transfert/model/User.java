@@ -1,7 +1,9 @@
 package com.fil.transfert.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
@@ -61,10 +63,24 @@ public class User{
     @ManyToOne
     @JoinColumn(name="partenaire_id", nullable=true)
     private Partenaire partenaire;
-
+    @ManyToOne
+    @JoinColumn(name="compte_id", nullable=true)
+    private Compte compte;
+    @JsonIgnore
     @OneToMany(mappedBy="createdBy")
     private Set<Partenaire> partenaires;
 
+    @OneToMany(mappedBy="caissier")
+    private Set<Operation> operations;
+
+    public Compte getCompte() {
+        return compte;
+    }
+
+    public void setCompte(Compte compte) {
+        this.compte = compte;
+    }
+    @JsonManagedReference
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -178,5 +194,13 @@ public class User{
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public Set<Operation> getOperations() {
+        return operations;
+    }
+
+    public void setOperations(Set<Operation> operations) {
+        this.operations = operations;
     }
 }
